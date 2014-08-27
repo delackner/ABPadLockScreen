@@ -81,4 +81,6 @@
 
 - (id)initWithFrame:(CGRect)frame complexPin:(BOOL)complexPin;
 
+- (void)setContentBackgroundColor:(UIColor*)color;
+
 @end

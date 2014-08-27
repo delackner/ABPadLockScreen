@@ -177,6 +177,10 @@
     return _digitsArray;
 }
 
+- (void)setContentBackgroundColor:(UIColor*)color {
+    _contentView.backgroundColor = color;
+}
+
 - (void)showCancelButtonAnimated:(BOOL)animated completion:(void (^)(BOOL finished))completion
 {
     __weak ABPadLockScreenView *weakSelf = self;
@@ -474,7 +478,7 @@
 	if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 	{
 		//Center it with zero button
-		deleteCancelButtonFrame = CGRectMake(rightButtonLeft, zeroRowTop + (ABPadButtonHeight / 2 - 10), ABPadButtonWidth, 20);
+		deleteCancelButtonFrame = CGRectMake(rightButtonLeft, zeroRowTop, ABPadButtonWidth, ABPadButtonHeight);
 	}
 	
     if (!self.cancelButtonDisabled)
