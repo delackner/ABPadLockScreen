@@ -81,11 +81,22 @@
     if (self)
     {
         [self setDefaultStyles];
-		
+        
 		_contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, MIN(frame.size.height, 568.0f))];
 		_contentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
 		_contentView.center = self.center;
-		[self addSubview:_contentView];
+        
+
+        if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
+            UIVisualEffect *e = [UIBlurEffect effectWithStyle: UIBlurEffectStyleExtraLight];
+            UIVisualEffectView *v = [[UIVisualEffectView alloc] initWithEffect:e];
+            v.frame = self.bounds;
+            [self addSubview: v];
+            [v.contentView addSubview:_contentView];
+        }
+        else {
+            [self addSubview:_contentView];
+        }
         
         _requiresRotationCorrection = NO;
         
@@ -357,8 +368,12 @@
 {
     _enterPasscodeLabelFont = [UIFont systemFontOfSize:18];
     _detailLabelFont = [UIFont systemFontOfSize:14];
-    
-    _labelColor = [UIColor whiteColor];
+
+    UIColor *c = [[ABPadLockScreenView appearance] labelColor];
+    if (!c) {
+        c = [UIColor whiteColor];
+    }
+    _labelColor = c;
 }
 
 - (void)prepareAppearance

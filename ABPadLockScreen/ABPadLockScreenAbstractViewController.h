@@ -34,6 +34,7 @@
 
 @property (nonatomic, strong) NSString *currentPin;
 @property (nonatomic, weak) id<ABPadLockScreenDelegate> delegate;
+@property (nonatomic, strong) UIView *parentBackgroundView;
 @property (nonatomic, readonly, getter = isComplexPin) BOOL complexPin;
 
 - (id)initWithComplexPin:(BOOL)complexPin;
@@ -42,6 +43,7 @@
 - (void)deleteFromPin;
 
 - (void)setLockScreenTitle:(NSString *)title;
+- (void)setMainText:(NSString *)text;
 - (void)setSubtitleText:(NSString *)text;
 - (void)setCancelButtonText:(NSString *)text;
 - (void)setDeleteButtonText:(NSString *)text;

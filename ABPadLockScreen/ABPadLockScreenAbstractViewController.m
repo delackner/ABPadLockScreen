@@ -68,6 +68,9 @@
     [super viewDidLoad];
     
     self.view = [[ABPadLockScreenView alloc] initWithFrame:self.view.bounds complexPin:self.isComplexPin];
+    if (self.parentBackgroundView) {
+        [self.view insertSubview:_parentBackgroundView atIndex:0];
+    }
     [self setUpButtonMapping];
     [lockScreenView.cancelButton addTarget:self action:@selector(cancelButtonSelected:) forControlEvents:UIControlEventTouchUpInside];
     [lockScreenView.deleteButton addTarget:self action:@selector(deleteButtonSelected:) forControlEvents:UIControlEventTouchUpInside];
@@ -129,6 +132,10 @@
 {
     self.title = title;
     lockScreenView.enterPasscodeLabel.text = title;
+}
+
+- (void)setMainText:(NSString *)text {
+    lockScreenView.enterPasscodeLabel.text = text;
 }
 
 - (void)setSubtitleText:(NSString *)text
