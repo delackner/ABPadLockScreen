@@ -186,6 +186,3 @@
 }
 
 @end
-
-CGFloat const ABPadButtonHeight = 75;
-CGFloat const ABPadButtonWidth = 75;

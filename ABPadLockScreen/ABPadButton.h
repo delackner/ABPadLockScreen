@@ -39,6 +39,3 @@
 @property (nonatomic, strong) UIFont *letterLabelFont UI_APPEARANCE_SELECTOR;
 
 @end
-
-extern CGFloat const ABPadButtonHeight;
-extern CGFloat const ABPadButtonWidth;

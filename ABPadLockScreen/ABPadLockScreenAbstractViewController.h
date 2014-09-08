@@ -48,8 +48,7 @@
 - (void)setCancelButtonText:(NSString *)text;
 - (void)setDeleteButtonText:(NSString *)text;
 
-- (void)cancelButtonDisabled:(BOOL)disabled;
-
+- (void)cancelButtonDisabled:(BOOL)disabled;    
 - (void)setBackgroundView:(UIView*)backgroundView;
 
 - (void)processPin; //Called when the pin has reached maximum digits
@@ -59,5 +58,7 @@
 @protocol ABPadLockScreenDelegate <NSObject>
 @required
 - (void)unlockWasCancelledForPadLockScreenViewController:(ABPadLockScreenAbstractViewController *)padLockScreenViewController;
+@optional
+- (ABPadLockScreenView*)makePinScreenView:(CGRect)frame complexPin:(BOOL)isComplexPin;
 
 @end

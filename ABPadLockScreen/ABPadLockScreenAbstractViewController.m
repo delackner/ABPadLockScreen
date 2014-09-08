@@ -66,8 +66,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    if ([self.delegate respondsToSelector:@selector(makePinScreenView:complexPin:)]) {
+        self.view = [self.delegate makePinScreenView:self.view.bounds complexPin:self.isComplexPin];
+    }
+    else {
+        self.view = [[ABPadLockScreenView alloc] initWithFrame:self.view.bounds complexPin:self.isComplexPin];
+    }
     
-    self.view = [[ABPadLockScreenView alloc] initWithFrame:self.view.bounds complexPin:self.isComplexPin];
     if (self.parentBackgroundView) {
         [self.view insertSubview:_parentBackgroundView atIndex:0];
     }

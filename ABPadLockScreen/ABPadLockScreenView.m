@@ -31,7 +31,6 @@
 @interface ABPadLockScreenView()
 
 @property (nonatomic, assign) BOOL requiresRotationCorrection;
-@property (nonatomic, strong) UIView* contentView;
 @property (nonatomic, strong) UIView* backgroundBlurringView;
 
 - (void)setDefaultStyles;
@@ -81,22 +80,7 @@
     if (self)
     {
         [self setDefaultStyles];
-        
-		_contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, MIN(frame.size.height, 568.0f))];
-		_contentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
-		_contentView.center = self.center;
-        
-
-        if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
-            UIVisualEffect *e = [UIBlurEffect effectWithStyle: UIBlurEffectStyleExtraLight];
-            UIVisualEffectView *v = [[UIVisualEffectView alloc] initWithEffect:e];
-            v.frame = self.bounds;
-            [self addSubview: v];
-            [v.contentView addSubview:_contentView];
-        }
-        else {
-            [self addSubview:_contentView];
-        }
+        [self addContentView];
         
         _requiresRotationCorrection = NO;
         
@@ -143,6 +127,36 @@
         _complexPin = NO;
     }
     return self;
+}
+
+- (CGFloat)buttonWidth {
+    return 75;
+}
+
+- (CGFloat)horizontalButtonPadding{
+    return 20;
+}
+
+- (CGFloat)verticalButtonPadding{
+    return 10;
+}
+
+- (void)addContentView {
+    _contentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, MIN(self.frame.size.height, 568.0f))];
+    _contentView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleBottomMargin;
+    _contentView.center = self.center;
+    
+    
+    if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending) {
+        UIVisualEffect *e = [UIBlurEffect effectWithStyle: UIBlurEffectStyleExtraLight];
+        UIVisualEffectView *v = [[UIVisualEffectView alloc] initWithEffect:e];
+        v.frame = self.bounds;
+        [self addSubview: v];
+        [v.contentView addSubview:_contentView];
+    }
+    else {
+        [self addSubview:_contentView];
+    }
 }
 
 #pragma mark -
@@ -452,22 +466,23 @@
 
 - (void)layoutButtonArea
 {
-    CGFloat horizontalButtonPadding = 20;
-    CGFloat verticalButtonPadding = 10;
+    CGFloat horizontalButtonPadding = [self horizontalButtonPadding];
+    CGFloat verticalButtonPadding = [self verticalButtonPadding];
     
-    CGFloat buttonRowWidth = (ABPadButtonWidth * 3) + (horizontalButtonPadding * 2);
+    CGFloat w = [self buttonWidth];
+    CGFloat buttonRowWidth = (w * 3) + (horizontalButtonPadding * 2);
     
     CGFloat lefButtonLeft = ([self correctWidth]/2) - (buttonRowWidth/2) + 0.5;
-    CGFloat centerButtonLeft = lefButtonLeft + ABPadButtonWidth + horizontalButtonPadding;
-    CGFloat rightButtonLeft = centerButtonLeft + ABPadButtonWidth + horizontalButtonPadding;
+    CGFloat centerButtonLeft = lefButtonLeft + w + horizontalButtonPadding;
+    CGFloat rightButtonLeft = centerButtonLeft + w + horizontalButtonPadding;
     
     CGFloat topRowTop = self.detailLabel.frame.origin.y + self.detailLabel.frame.size.height + 15;
     
     if (!IS_IPHONE5) topRowTop = self.detailLabel.frame.origin.y + self.detailLabel.frame.size.height + 10;
     
-    CGFloat middleRowTop = topRowTop + ABPadButtonHeight + verticalButtonPadding;
-    CGFloat bottomRowTop = middleRowTop + ABPadButtonHeight + verticalButtonPadding;
-    CGFloat zeroRowTop = bottomRowTop + ABPadButtonHeight + verticalButtonPadding;
+    CGFloat middleRowTop = topRowTop + w + verticalButtonPadding;
+    CGFloat bottomRowTop = middleRowTop + w + verticalButtonPadding;
+    CGFloat zeroRowTop = bottomRowTop + w + verticalButtonPadding;
     
     [self setUpButton:self.buttonOne left:lefButtonLeft top:topRowTop];
     [self setUpButton:self.buttonTwo left:centerButtonLeft top:topRowTop];
@@ -483,17 +498,17 @@
     
     [self setUpButton:self.buttonZero left:centerButtonLeft top:zeroRowTop];
     
-	CGRect deleteCancelButtonFrame = CGRectMake(rightButtonLeft, zeroRowTop + ABPadButtonHeight + 25, ABPadButtonWidth, 20);
+	CGRect deleteCancelButtonFrame = CGRectMake(rightButtonLeft, zeroRowTop + w + 25, w, 20);
 	if(!IS_IPHONE5)
 	{
 		//Bring it higher for small device screens
-		deleteCancelButtonFrame = CGRectMake(rightButtonLeft, zeroRowTop + ABPadButtonHeight - 20, ABPadButtonWidth, 20);
+		deleteCancelButtonFrame = CGRectMake(rightButtonLeft, zeroRowTop + w - 20, w, 20);
 	}
 	
 	if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 	{
 		//Center it with zero button
-		deleteCancelButtonFrame = CGRectMake(rightButtonLeft, zeroRowTop, ABPadButtonWidth, ABPadButtonHeight);
+		deleteCancelButtonFrame = CGRectMake(rightButtonLeft, zeroRowTop, w, w);
 	}
 	
     if (!self.cancelButtonDisabled)
@@ -508,9 +523,10 @@
 
 - (void)setUpButton:(UIButton *)button left:(CGFloat)left top:(CGFloat)top
 {
-    button.frame = CGRectMake(left, top, ABPadButtonWidth, ABPadButtonHeight);
+    CGFloat w = [self buttonWidth];
+    button.frame = CGRectMake(left, top, w, w);
     [self.contentView addSubview:button];
-    [self setRoundedView:button toDiameter:75];
+    [self setRoundedView:button toDiameter:w];
 }
 
 - (void)setUpPinSelectionView:(ABPinSelectionView *)selectionView left:(CGFloat)left top:(CGFloat)top

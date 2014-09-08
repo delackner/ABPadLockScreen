@@ -28,6 +28,7 @@
 @interface ABPinSelectionView()
 
 @property (nonatomic, strong) UIView *selectedView;
+@property (nonatomic, strong) UIView *emptyView;
 
 - (void)setDefaultStyles;
 - (void)prepareApperance;
@@ -84,12 +85,23 @@
     self.selectedView.backgroundColor = self.selectedColor;
     self.layer.borderColor = [self.selectedColor CGColor];
     self.backgroundColor = [UIColor clearColor];
+    
+    if (_useFlatEmptyView) {
+        self.layer.borderWidth = 0.f;
+        _emptyView.backgroundColor = self.selectedColor;
+    }
 }
 
 - (void)performLayout
 {
     self.selectedView.frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     [self addSubview:self.selectedView];
+    
+    if (_useFlatEmptyView) {
+        CGFloat h = 2;
+        _emptyView = [[UIView alloc] initWithFrame: CGRectMake(0,(self.frame.size.height - h)/2,self.frame.size.width, h)];
+        [self addSubview:self.emptyView];
+    }
 }
 
 #pragma mark -
@@ -98,10 +110,12 @@
 {
     CGFloat length = (animated) ? animationLength : 0.0f;
     CGFloat alpha = (selected) ? 1.0f : 0.0f;
+    CGFloat emptyAlpha = (!selected) ? 1.0f : 0.0f;
     
     [UIView animateWithDuration:length delay:0.0f options:UIViewAnimationOptionCurveEaseIn
                      animations:^{
                          self.selectedView.alpha = alpha;
+                         self.emptyView.alpha = emptyAlpha;
                      }
                      completion:completion];
 }

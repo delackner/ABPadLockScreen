@@ -28,6 +28,7 @@
 @property (nonatomic, strong) UIFont *detailLabelFont UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *labelColor UI_APPEARANCE_SELECTOR;
 
+@property (nonatomic, strong) UIView* contentView;
 @property (nonatomic, strong) UIView* backgroundView;
 
 @property (nonatomic, assign) BOOL cancelButtonDisabled;
@@ -82,5 +83,18 @@
 - (id)initWithFrame:(CGRect)frame complexPin:(BOOL)complexPin;
 
 - (void)setContentBackgroundColor:(UIColor*)color;
+
+
+// override in subclass to customize layout
+- (void)layoutTitleArea;
+- (void)layoutButtonArea;
+- (void)prepareAppearance;
+
+- (CGFloat)buttonWidth;
+- (CGFloat)horizontalButtonPadding;
+- (CGFloat)verticalButtonPadding;
+
+- (void)addContentView;
+- (void)setUpButton:(UIButton *)button left:(CGFloat)left top:(CGFloat)top;
 
 @end
