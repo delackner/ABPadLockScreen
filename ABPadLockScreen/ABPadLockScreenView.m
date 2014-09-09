@@ -116,17 +116,42 @@
         _deleteButton = [UIButton buttonWithType:buttonType];
         [_deleteButton setTitle:NSLocalizedString(@"Delete", @"") forState:UIControlStateNormal];
 		_deleteButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-        _deleteButton.alpha = 0.0f;
+        [self button:_deleteButton setEnabled:NO];
         
 		_okButton = [UIButton buttonWithType:buttonType];
 		[_okButton setTitle:NSLocalizedString(@"OK", @"") forState:UIControlStateNormal];
-		_okButton.alpha = 0.0f;
+        [self button:_okButton setEnabled:NO];
 		_okButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
 		
         // default to NO
         _complexPin = NO;
     }
     return self;
+}
+
+- (void)button:(UIButton*)b setEnabled:(BOOL)e {
+    if (e) {
+        b.alpha = 1.f;
+        b.enabled = YES;
+        b.userInteractionEnabled = TRUE;
+    }
+    else {
+        if ([self showDisabledButtons]) {
+            b.userInteractionEnabled = FALSE;
+            b.enabled = NO;
+        }
+        else {
+            b.alpha = 0.f;
+        }
+    }
+    
+    if (b == _okButton) {
+        UIColor *ce = self.okEnabledBackgroundColor;
+        if (ce) {
+            UIColor *cd = self.okDisabledBackgroundColor;
+            b.backgroundColor = e ? ce : cd;
+        }
+    }
 }
 
 - (CGFloat)buttonWidth {
@@ -139,6 +164,10 @@
 
 - (CGFloat)verticalButtonPadding{
     return 10;
+}
+
+- (BOOL)showDisabledButtons {
+    return NO;
 }
 
 - (void)addContentView {
@@ -210,8 +239,8 @@
 {
     __weak ABPadLockScreenView *weakSelf = self;
     [self performAnimations:^{
-        weakSelf.cancelButton.alpha = 1.0f;
-        weakSelf.deleteButton.alpha = 0.0f;
+        [weakSelf button:_cancelButton setEnabled:YES];
+        [weakSelf button:_deleteButton setEnabled:NO];
     } animated:animated completion:completion];
 }
 
@@ -219,8 +248,8 @@
 {
     __weak ABPadLockScreenView *weakSelf = self;
     [self performAnimations:^{
-        weakSelf.cancelButton.alpha = 0.0f;
-        weakSelf.deleteButton.alpha = 1.0f;
+        [weakSelf button:_cancelButton setEnabled:NO];
+        [weakSelf button:_deleteButton setEnabled:YES];
     } animated:animated completion:completion];
 }
 
@@ -228,7 +257,7 @@
 {
 	__weak ABPadLockScreenView *weakSelf = self;
     [self performAnimations:^{
-        weakSelf.okButton.alpha = show ? 1.0f : 0.0f;
+        [weakSelf button:weakSelf.okButton setEnabled:show];
     } animated:animated completion:completion];
 }
 
@@ -236,10 +265,7 @@
 {
     CGFloat length = (animated) ? animationLength : 0.0;
     CGFloat labelWidth = 15; // padding
-	if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_6_1)
-		labelWidth += [string sizeWithAttributes:@{NSFontAttributeName:self.detailLabelFont}].width;
-	else
-		labelWidth += [string sizeWithFont: self.detailLabelFont].width;
+    labelWidth += [string sizeWithAttributes:@{NSFontAttributeName:self.detailLabelFont}].width;
 
     CATransition *animation = [CATransition animation];
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];

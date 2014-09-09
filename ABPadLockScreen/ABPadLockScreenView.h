@@ -27,6 +27,8 @@
 @property (nonatomic, strong) UIFont *enterPasscodeLabelFont UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIFont *detailLabelFont UI_APPEARANCE_SELECTOR;
 @property (nonatomic, strong) UIColor *labelColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *okEnabledBackgroundColor UI_APPEARANCE_SELECTOR;
+@property (nonatomic, strong) UIColor *okDisabledBackgroundColor UI_APPEARANCE_SELECTOR;
 
 @property (nonatomic, strong) UIView* contentView;
 @property (nonatomic, strong) UIView* backgroundView;
@@ -90,6 +92,8 @@
 - (void)layoutButtonArea;
 - (void)prepareAppearance;
 
+- (void)button:(UIButton*)b setEnabled:(BOOL)e;
+- (BOOL)showDisabledButtons;
 - (CGFloat)buttonWidth;
 - (CGFloat)horizontalButtonPadding;
 - (CGFloat)verticalButtonPadding;

@@ -224,7 +224,13 @@
     else if (!self.isComplexPin && [self.currentPin length] == 4)
     {
         [lockScreenView.digitsArray.lastObject setSelected:YES animated:YES completion:nil];
-        [self processPin];
+        if (![self.delegate respondsToSelector:@selector(autoProcessWhenAllDigitsAvailable)] ||
+            [self.delegate autoProcessWhenAllDigitsAvailable]) {
+            [self processPin];
+        }
+        else {
+            [lockScreenView button:lockScreenView.okButton setEnabled:YES];
+        }
     }
 }
 
@@ -245,6 +251,7 @@
 	{
 		NSUInteger pinToDeselect = [self.currentPin length];
 		[lockScreenView.digitsArray[pinToDeselect] setSelected:NO animated:YES completion:nil];
+        [lockScreenView button:lockScreenView.okButton setEnabled:NO];
 	}
     
     if ([self.currentPin length] == 0)

@@ -60,5 +60,5 @@
 - (void)unlockWasCancelledForPadLockScreenViewController:(ABPadLockScreenAbstractViewController *)padLockScreenViewController;
 @optional
 - (ABPadLockScreenView*)makePinScreenView:(CGRect)frame complexPin:(BOOL)isComplexPin;
-
+- (BOOL)autoProcessWhenAllDigitsAvailable; //check the pin as soon as all digits are entered?
 @end

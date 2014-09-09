@@ -86,6 +86,18 @@
     [self prepareApperance];
 }
 
+- (void)setLetterLabelFont:(UIFont *)letterLabelFont {
+    _letterLabelFont = letterLabelFont;
+    NSString *s = _lettersLabel.text;
+    if (!s) {
+        s = @"";
+    }
+    _lettersLabel.attributedText = [[NSAttributedString alloc] initWithString:s attributes:@{NSFontAttributeName: _letterLabelFont, NSKernAttributeName: @2}];
+    CGRect f = _lettersLabel.frame;
+    f.size.height = _letterLabelFont.lineHeight;
+    _lettersLabel.frame = f;
+}
+
 #pragma mark -
 #pragma mark - Helper Methods
 - (void)setDefaultStyles
@@ -134,7 +146,7 @@
 		self.numberLabel.center = center;
 	}
     
-    self.lettersLabel.frame = CGRectMake(0, self.numberLabel.frame.origin.y + self.numberLabel.frame.size.height + 3, self.frame.size.width, 10);
+    self.lettersLabel.frame = CGRectMake(0, self.numberLabel.frame.origin.y + self.numberLabel.frame.size.height + 3, self.frame.size.width, _letterLabelFont.lineHeight);
     [self addSubview:self.lettersLabel];
 }
 

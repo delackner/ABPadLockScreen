@@ -98,8 +98,9 @@
     [self addSubview:self.selectedView];
     
     if (_useFlatEmptyView) {
-        CGFloat h = 2;
-        _emptyView = [[UIView alloc] initWithFrame: CGRectMake(0,(self.frame.size.height - h)/2,self.frame.size.width, h)];
+        CGFloat w = self.frame.size.width;
+        CGFloat h = w/5;
+        _emptyView = [[UIView alloc] initWithFrame: CGRectMake((self.frame.size.width - w)/2,(self.frame.size.height - h)/2, w, h)];
         [self addSubview:self.emptyView];
     }
 }
